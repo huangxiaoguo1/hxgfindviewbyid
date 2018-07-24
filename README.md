@@ -167,3 +167,12 @@ public class MyFragment extends Fragment {
 ```
 View mView = HxgViewUtils.getView().inject(this, inflater, container);
 ```
+
+### 配合androidStudio使用
+
+```
+插件地址：
+
+https://github.com/huangxiaoguo1/hxgfindviewbyid/tree/master/app/src/main/assets
+
+```
