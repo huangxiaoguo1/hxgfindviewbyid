@@ -17,18 +17,13 @@ import tsou.cn.lib_hxgioc.HxgViewUtils;
 @HxgContentView(R.layout.activity_main)
 public class MainActivity extends AppCompatActivity {
 
+
     /**
      * Hello World!
      **/
     @HxgBind(R.id.text_iv)
     private TextView mTextIv;
-    /**
-     * 点击
-     **/
-    @HxgBind(R.id.btn)
-    private Button mBtn;
-    @HxgBind(R.id.fl_main)
-    private FrameLayout mFlMain;
+
     private FragmentManager fragmentManager;
 
     @Override
@@ -52,4 +47,5 @@ public class MainActivity extends AppCompatActivity {
     private void onClick(Button view) {
         Toast.makeText(this, "点击了Button", Toast.LENGTH_LONG).show();
     }
+
 }
