@@ -9,4 +9,6 @@ public interface HxgContast {
     int DEFAULT_TYPE = 1;
     //不显示未联网提示，直接拦截
     int NOHINT_TYPE = -1;
+    //去除防止多次点击
+    int DEFF_TIME = 0;
 }

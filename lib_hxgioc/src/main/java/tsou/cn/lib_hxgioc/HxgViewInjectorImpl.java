@@ -11,13 +11,14 @@ import java.lang.reflect.Method;
 import java.util.HashSet;
 
 import tsou.cn.lib_hxgioc.data.HxgContast;
+import tsou.cn.lib_hxgioc.utils.ClickMoreUtils;
 import tsou.cn.lib_hxgioc.utils.NetUtils;
 
 /**
  * Created by Administrator on 2018/6/20 0020.
  */
 
- class HxgViewInjectorImpl implements HxgViewInjector {
+class HxgViewInjectorImpl implements HxgViewInjector {
     private static final HashSet<Class<?>> IGNORED = new HashSet<Class<?>>();
 
     static {
@@ -221,15 +222,25 @@ import tsou.cn.lib_hxgioc.utils.NetUtils;
                      * 扩展，检查网络
                      */
                     HxgCheckNet checkNet = method.getAnnotation(HxgCheckNet.class);
+
                     int stringName = HxgContast.DEFAULT_TYPE;
                     if (null != checkNet) {
                         stringName = checkNet.value();
                     }
                     boolean isCheckNet = checkNet != null;
+
+                    /**
+                     * 扩展，防止多次点击
+                     */
+                    HxgClickMore clickMore = method.getAnnotation(HxgClickMore.class);
+                    int deffTime = 1500;
+                    if (null != clickMore) {
+                        deffTime = clickMore.value();
+                    }
                     if (null != view) {
                         //4、setOnClickListener
                         view.setOnClickListener(new DeclaredOnClickListner(method, object,
-                                isCheckNet, stringName));
+                                isCheckNet, stringName, deffTime));
                     }
                 }
             }
@@ -241,12 +252,14 @@ import tsou.cn.lib_hxgioc.utils.NetUtils;
         private Method mMethod;
         private boolean mIsCheckNet;
         private int mStringName;
+        private int mDeffTime;
 
-        public DeclaredOnClickListner(Method method, Object object, boolean isCheckNet, int stringName) {
+        public DeclaredOnClickListner(Method method, Object object, boolean isCheckNet, int stringName, int deffTime) {
             this.mMethod = method;
             this.mObject = object;
             this.mIsCheckNet = isCheckNet;
             this.mStringName = stringName;
+            this.mDeffTime = deffTime;
         }
 
         @Override
@@ -255,7 +268,7 @@ import tsou.cn.lib_hxgioc.utils.NetUtils;
             if (mIsCheckNet) {
                 if (!NetUtils.isNetworkConnected(view.getContext())) {
                     //不显示未联网提示，直接拦截
-                    if (mStringName== HxgContast.NOHINT_TYPE){
+                    if (mStringName == HxgContast.NOHINT_TYPE) {
                         return;
                     }
                     if (mStringName != HxgContast.DEFAULT_TYPE) {
@@ -269,6 +282,17 @@ import tsou.cn.lib_hxgioc.utils.NetUtils;
                         Toast.makeText(view.getContext(), context, Toast.LENGTH_LONG).show();
                     }
                     return;
+                }
+            }
+            if (mDeffTime != HxgContast.DEFF_TIME) {
+                if (mDeffTime > 0) {
+                    if (ClickMoreUtils.isFastDoubleClick(view.getId(), mDeffTime)) {
+                        return;
+                    }
+                }else {
+                    if (ClickMoreUtils.isFastDoubleClick(view.getId())) {
+                        return;
+                    }
                 }
             }
             //5、反射注入方法
