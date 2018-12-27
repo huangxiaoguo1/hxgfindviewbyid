@@ -11,7 +11,7 @@ allprojects {
 }
 
 dependencies {
-    implementation 'com.github.huangxiaoguo1:hxgfindviewbyid:1.0.0'
+    implementation 'com.github.huangxiaoguo1:hxgfindviewbyid:1.0.1'
 }
 ```
 
@@ -167,7 +167,18 @@ public class MyFragment extends Fragment {
 ```
 View mView = HxgViewUtils.getView().inject(this, inflater, container);
 ```
+### 防暴力点击
 
+```
+默认不做任何设置，带有的防暴力点击事件间隔是1500
+
+不设置默认时间间隔为1500；设置为0，或者HxgContast.DEFF_TIME,表示不阻值可以多次连续点击
+
+ @HxgClickMore(5000) :表示暴力点击事件间隔是5000，可以自行设置
+ 
+ @HxgClickMore(0)或@HxgClickMore(HxgContast.DEFF_TIME)：表示去除防暴力点击设置
+
+```
 ### 配合androidStudio使用
 
 ```
